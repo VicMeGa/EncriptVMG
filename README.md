@@ -1,12 +1,43 @@
-# React + Vite
+# Victor Meneses Garcia
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Proyecto de cifrado para la materia de Administración de redes
 
-Currently, two official plugins are available:
+## Características Principales
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+* React con TypeScript
+* Vite como build tool
+* Configuración optimizada para desarrollo
+* Estructura modular y escalable
 
-## Expanding the ESLint configuration
+## Requisitos
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* Node.js 18+
+* npm o yarn
+* Editor de código (recomendado VSCode)
+
+## Instalación
+
+```bash
+# Clonar el repositorio
+git clone [url-del-repositorio]
+
+# Navegar al directorio del proyecto
+cd [nombre-del-proyecto]
+
+# Instalar dependencias
+npm install
+```
+para ejecutar recomiendo
+```
+npm run dev
+```
+## Comandos Disponibles
+
+| Comando | Descripción |
+| --- | --- |
+| `npm run dev` | Iniciar servidor de desarrollo |
+| `npm run build` | Construir para producción |
+| `npm run preview` | Previsualizar build de producción |
+| `npm run lint` | Ejecutar linter |
+| `npm run test` | Ejecutar pruebas |
+```
