@@ -1,0 +1,136 @@
+/* Estilos generales */
+body{
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+.princ{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  align-content: center
+
+}
+
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Campos de texto */
+.textarea-container {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: border-color 0.2s ease;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.counter {
+  position: absolute;
+  bottom: -1.5rem;
+  right: 0;
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+/* Botones */
+.button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.btn-cifrar {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  margin-right: 0.75rem;
+}
+
+.btn-descifrar {
+  background-color: #22c55e;
+  color: white;
+  border: none;
+}
+
+/* Resultados */
+.result{
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.result-label {
+  margin-bottom: 0.75rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.result-textarea {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+  cursor: text;
+}
+
+.result-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.result-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.result-label {
+  margin-bottom: 0.75rem;
+  color: #374151;
+  font-weight: 500;
+  text-align: center;
+}
+
+.result-textarea {
+  width: 100%;
+  min-height: 150px;
+  max-height: 300px;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  cursor: text;
+  overflow-y: auto;
+  resize: vertical;
+}
