@@ -1,32 +1,47 @@
 /* Estilos generales */
-body{
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-.princ{
-  max-width: 900px;
+#root {
   margin: 0 auto;
   padding: 2rem;
   align-content: center
-
 }
 
-.container {
-  max-width: 800px;
-  margin: 2rem auto;
+body{
+  margin: auto;
+  font-family: sans-serif;
+  text-align:center;
+  background-color:#D2D9EC;
+  font-size: 20px
+}
+.princ{
+  margin: 0 auto;
   padding: 2rem;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  align-content: center;
+  display: flex;
 }
+
+.divI{
+  width: calc(1/2 * 100%);
+    padding: 1rem;
+    max-width: 800px;
+  margin: 2rem auto;
+  margin-right: 8%;
+}
+
+.divD{
+  width: calc(1/2 * 100%);
+    padding: 1rem;
+    max-width: 800px;
+  margin: 2rem auto;
+  margin-left:8%;
+}
+
 
 /* Campos de texto */
-.textarea-container {
+.campostexto {
   position: relative;
+  margin-top:1.5rem;
   margin-bottom: 1.5rem;
+  font-size:20px;
 }
 
 textarea {
@@ -62,6 +77,16 @@ textarea:focus {
   font-weight: 500;
   cursor: pointer;
   transition: transform 0.1s ease;
+  color:white;
+}
+
+.des:disabled{
+  color:black;
+}
+
+.des:enabled{
+  background-color: #6A89CC;
+  color:white;
 }
 
 .button:hover {
@@ -133,4 +158,8 @@ textarea:focus {
   cursor: text;
   overflow-y: auto;
   resize: vertical;
+}
+
+.errores{
+  color: red;
 }

@@ -1,109 +1,121 @@
-// 1. Crear la tabla personalizada con acentos y caracteres adicionales
-const tabla = [
-    " ", "!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", 
-    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", ":", ";", "<", "=", ">", "?", 
-    "@", "A", "Á", "B", "C", "D", "E", "É", "F", "G", "H", "I", "Í", "J", "K", "L", "M", "N", "Ñ", 
-    "O", "Ó", "P", "Q", "R", "S", "T", "U", "Ú", "Ü", "V", "W", "X", "Y", "Z", "[", "\\", "]", "^", 
-    "_", "`", "a", "á", "b", "c", "d", "e", "é", "f", "g", "h", "i", "í", "j", "k", "l", "m", "n", 
-    "ñ", "o", "ó", "p", "q", "r", "s", "t", "u", "ú", "ü", "v", "w", "x", "y", "z", "{", "|", "}", "~",
-    "·", "=", "'", "´", "+", ";", ">", "<", "¬", "}", "~", "{", "*", "/", "\\", "¿", "?", "!","¡","\"","%","°","\n"
-];
-// Calcula el tamaño de la tabla para facilitar cálculos de desplazamiento
-const tamañoTabla = tabla.length;
+// Validar clave: longitud mínima y composición
+function validarClave(clave) {
+    const minLength = 6;
+    const tieneNumero = /\d/;
+    const tieneMayuscula = /[A-Z]/;
+    const tieneEspecial = /[!@#$%^&*(),.?":{}|<>]/;
 
-// 2. Función para interpretar la clave
-function interpretarClave(clave) {
-    return clave.split("") // Divide la clave en caracteres individuales
-        .map((char) => {
-            if (!isNaN(char)) return { tipo: "D", valor: parseInt(char, 10) }; // Si es un número, es un desplazamiento positivo
-            if (char === "T") return { tipo: "T" }; // Si es 'T', es una transposición completa
-            if (char === "D") return { tipo: "D", valor: 1 }; // Si es 'D', desplazamiento positivo genérico
-            if (char === "I") return { tipo: "I", valor: -1 }; // Si es 'I', desplazamiento negativo genérico
-            return null; // Si no es válido, ignora el carácter
-        })
-        .filter(instruccion => instruccion !== null); // Elimina valores nulos del resultado
-}
-
-// 3. Función para transponer el mensaje completo
-function transponerMensajeCompleto(mensaje) {
-    // Invierte el orden de los caracteres en el mensaje
-    return mensaje.split("").reverse().join("");
-}
-
-// 4. Función para validar caracteres del mensaje y clave
-function validarCaracteres(cadena) {
-    // Verifica si todos los caracteres de la cadena están en la tabla
-    for (const char of cadena) {
-        if (!tabla.includes(char)) {
-            // Si no está permitido, lanza un error
-            throw new Error(`El carácter "${char}" no está permitido.`);
-        }
+    if (clave.length < minLength) {
+        throw new Error("La clave debe tener al menos 6 caracteres.");
+    }
+    if (!tieneNumero.test(clave)) {
+        throw new Error("La clave debe contener al menos un número.");
+    }
+    if (!tieneMayuscula.test(clave)) {
+        throw new Error("La clave debe contener al menos una letra mayúscula.");
+    }
+    if (!tieneEspecial.test(clave)) {
+        throw new Error("La clave debe contener al menos un carácter especial.");
     }
 }
 
-// 5. Función para cifrar un mensaje con una clave
+// Desplazar caracteres en base a su código ASCII
+function desplazarASCII(char, desplazamiento) {
+    const codigo = char.charCodeAt(0);
+    const nuevoCodigo = (codigo + desplazamiento + 256) % 256;
+    return String.fromCharCode(nuevoCodigo);
+}
+
+// Interpretar clave
+function interpretarClave(clave) {
+    return clave.split("")
+        .map((char) => {
+            if (!isNaN(char)) return { tipo: "D", valor: parseInt(char, 10) }; // Desplazamiento numérico
+            if (char === "T") return { tipo: "T" }; // Transposición completa
+            if (char === "D") return { tipo: "D", valor: 1 }; // Desplazamiento positivo
+            if (char === "I") return { tipo: "I", valor: -1 }; // Desplazamiento negativo
+            if (char === "C") return { tipo: "C" }; // Duplicar cada carácter
+            if (char === "G") return { tipo: "G", valor: 3 }; // Agrupar en bloques de N
+            return null; // Ignorar caracteres no válidos
+        })
+        .filter(instruccion => instruccion !== null);
+}
+
+// Aplicar las instrucciones al mensaje
+function aplicarInstruccionesASCII(mensaje, instrucciones, descifrar = false) {
+    let mensajeArray = mensaje.split("");
+
+    instrucciones.forEach(({ tipo, valor }) => {
+        const desplazamiento = descifrar ? -valor : valor;
+
+        if (tipo === "T") {
+            // Transposición completa: invertir el mensaje
+            mensajeArray = mensajeArray.reverse();
+        } else if (tipo === "D" || tipo === "I") {
+            // Desplazar caracteres según la instrucción
+            mensajeArray = mensajeArray.map((char) => desplazarASCII(char, desplazamiento));
+        } else if (tipo === "C") {
+            if (descifrar) {
+                // Operación inversa: eliminar duplicados
+                mensajeArray = mensajeArray.filter((_, index) => index % 2 === 0);
+            } else {
+                // Operación normal: duplicar caracteres
+                mensajeArray = mensajeArray.flatMap(char => [char, char]);
+            }
+        } else if (tipo === "X") {
+            if (descifrar) {
+                // Operación inversa del intercalado
+                const pares = [];
+                const impares = [];
+                mensajeArray.forEach((char, index) => {
+                    (index % 2 === 0) ? pares.push(char) : impares.push(char);
+                });
+                mensajeArray = [...pares, ...impares];
+            } else {
+                // Operación normal de intercalado
+                const mitad = Math.ceil(mensajeArray.length / 2);
+                const primeraMitad = mensajeArray.slice(0, mitad);
+                const segundaMitad = mensajeArray.slice(mitad);
+                
+                mensajeArray = [];
+                for (let i = 0; i < mitad; i++) {
+                    if (primeraMitad[i]) mensajeArray.push(primeraMitad[i]);
+                    if (segundaMitad[i]) mensajeArray.push(segundaMitad[i]);
+                }
+            }
+        } else if (tipo === "G") {
+            const tamanoGrupo = valor || 3;
+            let nuevoArray = [];
+            for (let i = 0; i < mensajeArray.length; i += tamanoGrupo) {
+                const grupo = mensajeArray.slice(i, i + tamanoGrupo);
+                nuevoArray.push(...grupo.reverse());
+            }
+            mensajeArray = nuevoArray;
+        }
+    });
+
+    return mensajeArray.join("");
+}
+
+// Cifrar mensaje
 function cifrarMensajeConClave(mensaje, clave) {
-    validarCaracteres(mensaje); // Verifica que el mensaje use caracteres válidos
-    validarCaracteres(clave); // Verifica que la clave use caracteres válidos
-
-    const instrucciones = interpretarClave(clave); // Convierte la clave en instrucciones
-    let mensajeArray = mensaje.split(""); // Divide el mensaje en un array de caracteres
-
-    instrucciones.forEach((instruccion) => {
-        const tipo = instruccion.tipo; // Obtiene el tipo de instrucción
-        const valor = instruccion.valor; // Obtiene el valor de desplazamiento, si aplica
-
-        if (tipo === "T") {
-            // Si la instrucción es de tipo "T", invierte el mensaje
-            mensajeArray = transponerMensajeCompleto(mensajeArray.join("")).split("");
-        } else if (tipo === "D" || tipo === "I") {
-            // Si es desplazamiento, desplaza cada carácter en la tabla
-            mensajeArray = mensajeArray.map((char) => {
-                const actualIndex = tabla.indexOf(char); // Encuentra el índice del carácter en la tabla
-                if (actualIndex === -1) return char; // Si no está en la tabla, lo deja igual
-                const nuevoIndice = (actualIndex + valor + tamañoTabla) % tamañoTabla; // Calcula el nuevo índice de manera circular
-                return tabla[nuevoIndice]; // Obtiene el carácter en el nuevo índice
-            });
-        }
-    });
-
-    return mensajeArray.join(""); // Une los caracteres en un mensaje cifrado
+    validarClave(clave); // Validar la clave
+    const instrucciones = interpretarClave(clave); // Interpretar clave
+    return aplicarInstruccionesASCII(mensaje, instrucciones); // Aplicar instrucciones
 }
 
-// 6. Función para descifrar un mensaje cifrado con una clave
+// Descifrar mensaje
 function descifrarMensajeConClave(mensajeCifrado, clave) {
-    validarCaracteres(mensajeCifrado); // Verifica que el mensaje cifrado use caracteres válidos
-    validarCaracteres(clave); // Verifica que la clave use caracteres válidos
-
-    const instrucciones = interpretarClave(clave).reverse(); // Convierte la clave en instrucciones y las invierte
-    let mensajeArray = mensajeCifrado.split(""); // Divide el mensaje cifrado en un array de caracteres
-
-    instrucciones.forEach((instruccion) => {
-        const tipo = instruccion.tipo; // Obtiene el tipo de instrucción
-        const valor = instruccion.valor; // Obtiene el valor de desplazamiento, si aplica
-
-        if (tipo === "T") {
-            // Si la instrucción es de tipo "T", invierte el mensaje
-            mensajeArray = transponerMensajeCompleto(mensajeArray.join("")).split("");
-        } else if (tipo === "D" || tipo === "I") {
-            // Si es desplazamiento, ajusta cada carácter en la tabla en dirección opuesta
-            mensajeArray = mensajeArray.map((char) => {
-                const actualIndex = tabla.indexOf(char); // Encuentra el índice del carácter en la tabla
-                if (actualIndex === -1) return char; // Si no está en la tabla, lo deja igual
-                const nuevoIndice = (actualIndex - valor + tamañoTabla) % tamañoTabla; // Calcula el índice en dirección inversa
-                return tabla[nuevoIndice]; // Obtiene el carácter en el nuevo índice
-            });
-        }
-    });
-
-    return mensajeArray.join(""); // Une los caracteres en el mensaje descifrado
+    validarClave(clave); // Validar la clave
+    const instrucciones = interpretarClave(clave).reverse(); // Invertir instrucciones para descifrado
+    return aplicarInstruccionesASCII(mensajeCifrado, instrucciones, true); // Aplicar instrucciones
 }
 
-// Exporta las funciones para usarlas en otros archivos
+// Exportar funciones
 export function cifrado2(mensaje, clave) {
-    return cifrarMensajeConClave(mensaje, clave); // Cifra el mensaje
+    return cifrarMensajeConClave(mensaje, clave);
 }
 
 export function descifrado2(mensajeCifrado, clave) {
-    return descifrarMensajeConClave(mensajeCifrado, clave); // Descifra el mensaje
+    return descifrarMensajeConClave(mensajeCifrado, clave);
 }
