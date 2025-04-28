@@ -1,12 +1,12 @@
 // Validar clave: longitud mínima y composición
 function validarClave(clave) {
-    const minLength = 6;
+    const minLength = 10;
     const tieneNumero = /\d/;
     const tieneMayuscula = /[A-Z]/;
     const tieneEspecial = /[!@#$%^&*(),.?":{}|<>]/;
 
     if (clave.length < minLength) {
-        throw new Error("La clave debe tener al menos 6 caracteres.");
+        throw new Error("La clave debe tener al menos 10 caracteres.");
     }
     if (!tieneNumero.test(clave)) {
         throw new Error("La clave debe contener al menos un número.");
@@ -35,6 +35,7 @@ function interpretarClave(clave) {
             if (char === "D") return { tipo: "D", valor: 1 }; // Desplazamiento positivo
             if (char === "I") return { tipo: "I", valor: -1 }; // Desplazamiento negativo
             if (char === "C") return { tipo: "C" }; // Duplicar cada carácter
+            if (char === "X") return { tipo: "X" }; // Intercala los caracteres
             if (char === "G") return { tipo: "G", valor: 3 }; // Agrupar en bloques de N
             return null; // Ignorar caracteres no válidos
         })
