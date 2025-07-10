@@ -1,7 +1,10 @@
 # Victor Meneses Garcia
 
-Proyecto de cifrado para la materia de Administración de redes
+Proyecto de un metodo de cifrado basado en la maquina de Post
 
+La maquina se basa en una cinta infinita dividida en celdas que pueden contener símbolos (por lo general, 0 y 1) y un cabezal de lectura/escritura que puede moverse a la izquierda o derecha. La máquina ejecuta instrucciones simples (como leer, escribir, mover y saltar según condiciones) en función del símbolo actual.
+
+En este caso los simbolos se cabian por el codigo ascii y las instrucciones se cambian por las instrucciones de recorrer, trasponer, intercalar, etc.
 ## Características Principales
 
 * React con TypeScript
