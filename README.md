@@ -7,7 +7,7 @@ La maquina se basa en una cinta infinita dividida en celdas que pueden contener 
 En este caso los simbolos se cabian por el codigo ascii y las instrucciones se cambian por las instrucciones de recorrer, trasponer, intercalar, etc.
 ## Características Principales
 
-* React con TypeScript
+* React con JavaScript
 * Vite como build tool
 * Configuración optimizada para desarrollo
 * Estructura modular y escalable
